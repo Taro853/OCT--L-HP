@@ -1,9 +1,7 @@
-
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
 
-// ユーザー提供のFirebase構成
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDLeYuQEoAkACjAUtl7Yl2to7EPbNmCwi0",
   authDomain: "oct-hp.firebaseapp.com",
@@ -14,11 +12,19 @@ const firebaseConfig = {
   measurementId: "G-DEXS3BBN5W"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let app;
+let db;
 
-// Initialize Firestore (Database) and export it for use in App.tsx
-const db = getFirestore(app);
+try {
+  // Initialize Firebase
+  app = initializeApp(firebaseConfig);
+  // Initialize Firestore (Database)
+  db = getFirestore(app);
+} catch (error) {
+  console.warn("Firebase initialization failed. The app will run in mock mode.", error);
+  // Ensure db is null so the app falls back to initial constants
+  db = null;
+  app = null;
+}
 
-export { db, app, analytics };
+export { db, app };
